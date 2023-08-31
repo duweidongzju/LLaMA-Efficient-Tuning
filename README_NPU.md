@@ -59,6 +59,11 @@ INF_NAN_MODE_ENABLE=1 python src/train_bash.py \
 ```
 
 ## Export trained Model  
+训练前，需要在 `src/export_model.py` 文件中添加代码  
+```python
+import torch
+import torch_npu
+```
 运行下列脚本导出模型  
 ```bash
 #!/bin/bash
@@ -85,7 +90,7 @@ from transformers.generation import GenerationConfig
 
 torch.npu.set_compile_mode(jit_compile=False)
 
-model_path = "/home/username/EXPORT_MODEL/qwen-7b-chat/pt/"
+model_path = "/home/duweidong/EXPORT_MODEL/qwen-7b-chat/pt/"
 
 tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(model_path, device_map="npu:0", trust_remote_code=True,fp16=True).eval()
@@ -94,13 +99,13 @@ model.generation_config = GenerationConfig.from_pretrained(model_path, trust_rem
 history = None
 while True:
     quary = input("input:")
-    if quare == "exit":
+    if quary == "exit":
         break
     response, history = model.chat(tokenizer, quary, history=None)
     print(f"response:{response}")
 ```
 
-some chat example:  
+**some chat example:  **
 ```shell
 input:你好
 response:你好！很高兴为你提供帮助。
