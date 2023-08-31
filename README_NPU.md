@@ -105,7 +105,7 @@ while True:
     print(f"response:{response}")
 ```
 
-**some chat example:  **
+some chat examples:  
 ```shell
 input:你好
 response:你好！很高兴为你提供帮助。
