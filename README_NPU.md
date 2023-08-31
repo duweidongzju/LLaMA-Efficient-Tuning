@@ -1,4 +1,4 @@
-# LLaMA Efficient Tuning on NPU  
+# LLM Efficient Tuning on NPU  
 此文档演示了如何在NPU上进行大模型的训练。  
  
 ## Prepare the Model  
@@ -83,7 +83,7 @@ python src/export_model.py \
 ```
 
 ## Inference
-运行下列脚本进行在线对话
+运行下列python代码进行在线对话
 ```python
 import torch, torch_npu
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -116,11 +116,8 @@ response:是的，Web应用防火墙（WAF）是一种网络安全技术，可�
 
 input:请介绍迷网和蜜罐的区别
 response:迷网和蜜罐都是网络安全领域中的概念，它们的主要区别在于它们的目的和作用。
-
 迷网（也称为欺骗网络）是一种攻击技术，其目的是通过制造虚假的网络环境来欺骗攻击者或恶意软件。这种技术通常使用欺骗性的IP地址、虚假的网络服务、伪造的认证信息等手段来制造虚假的网络环境。攻击者在进入迷网后，会误认为自己处于一个安全的环境中，从而放松警惕，进而被攻击者利用。
-
 蜜罐（也称为诱饵系统）是一种网络安全技术，其目的是通过故意暴露一些虚假的信息或资源来吸引攻击者。这种技术通常使用一些看起来像是真实目标的网络服务或资源，如Web服务器、电子邮件服务器、数据库等，来吸引攻击者。攻击者在访问这些蜜罐时，会向其暴露一些有价值的信息或资源，从而被攻击者捕获和分析。
-
 总之，迷网和蜜罐都是网络安全领域中的技术，它们的目的和作用不同。迷网旨在欺骗攻击者，而蜜罐旨在吸引攻击者并捕获其信息。
 
 input:exit
