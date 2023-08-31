@@ -90,7 +90,7 @@ from transformers.generation import GenerationConfig
 
 torch.npu.set_compile_mode(jit_compile=False)
 
-model_path = "/home/duweidong/EXPORT_MODEL/qwen-7b-chat/pt/"
+model_path = "/home/username/EXPORT_MODEL/qwen-7b-chat/pt/"
 
 tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(model_path, device_map="npu:0", trust_remote_code=True,fp16=True).eval()
