@@ -59,11 +59,12 @@ INF_NAN_MODE_ENABLE=1 python src/train_bash.py \
 ```
 
 ## Export trained Model  
-训练前，需要在 `src/export_model.py` 文件中添加代码  
+导出模型前，需要在 `src/export_model.py` 文件中添加代码  
 ```python
 import torch
 import torch_npu
 ```
+
 运行下列脚本导出模型  
 ```bash
 #!/bin/bash
