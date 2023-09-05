@@ -192,10 +192,7 @@ def load_model_and_tokenizer(
     # Prepare model for inference
     if not is_trainable:
         model.requires_grad_(False) # fix all model params
-        try: # detect cuda capability
-            infer_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported()
-        except:
-            infer_dtype = torch.float16 
+        infer_dtype = torch.float16 
         model = model.to(infer_dtype) if model_args.quantization_bit is None else model
 
     trainable_params, all_param = count_parameters(model)
