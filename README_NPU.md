@@ -58,6 +58,62 @@ INF_NAN_MODE_ENABLE=1 python src/train_bash.py \
     --overwrite_output_dir
 ```
 
+<details>
+<summary> NPU 多卡训练流程 </summary>
+
+设置 accelerate config
+```shell
+>>> accelerate config
+-------------------------------------------------------------------------------------------------------------------------------------
+In which compute environment are you running?
+-> This machine                                                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------
+Which type of machine are you using?                                                                                                                                       
+-> multi-NPU                                                                                                                                                
+How many different machines will you use (use more than 1 for multi-node training)? [1]: 1                                                                                              
+Should distributed operations be checked while running for errors? This can avoid timeout issues but will be slower. [yes/NO]: no                                                                
+Do you wish to optimize your script with torch dynamo?[yes/NO]:no                                                                         
+Do you want to use FullyShardedDataParallel? [yes/NO]: no                                                                                                                  
+How many NPU(s) should be used for distributed training? [1]:8                                                                                                                   
+What GPU(s) (by id) should be used for training on this machine as a comma-seperated list? [all]:all
+--------------------------------------------------------------------------------------------------------------------------------------
+Do you wish to use FP16 or BF16 (mixed precision)?
+-> fp16
+```
+
+使用下面脚本进行多卡训练,脚本路径`./scripts/run_pretraining_multi_NPUs.sh`  
+如果需要训练其它模型。请修改`--model_name_or_path`,`--lora_target`,`--template`  
+```bash
+#!/bin/bash
+
+model_name=llama-2-7b-hf
+path_to_llama_model=/home/username/MODEL/$model_name
+path_to_pt_checkpoint=/home/username/CHECKPOINT/$model_name/pt
+mkdir -p path_to_pt_checkpoint
+
+INF_NAN_MODE_ENABLE=1 accelerate launch scr/train_bash.py
+    --stage pt \
+    --model_name_or_path $path_to_llama_model \
+    --do_train \
+    --dataset wiki_domo \
+    --template default \
+    --finetuning_type lora \
+    --lora_target q_proj,v_proj \
+    --output_dir $path_to_pt_checkpoint \
+    --overwrite_cache \
+    --overwrite_output_dir \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --logging_steps 10 \
+    --save_steps 1000 \
+    --learning_rate 5e-5 \
+    --num_train_epochs 10.0 \
+    --fp16
+```
+
+</details>
+
 ## Export trained Model  
 导出模型前，需要在 `src/export_model.py` 文件中添加代码  
 ```python
@@ -122,4 +178,22 @@ response:迷网和蜜罐都是网络安全领域中的概念，它们的主要�
 
 input:exit
 ```
+
+# Support Models
+
+## model
+| 模型名                                                   | 模型大小                     | 默认模块           | Template |
+| -------------------------------------------------------- | --------------------------- | ----------------- |----------|
+| [LLaMA](https://github.com/facebookresearch/llama)       | 7B/13B/33B/65B              | q_proj,v_proj     | -        |
+| [LLaMA-2](https://huggingface.co/meta-llama)             | 7B/13B/70B                  | q_proj,v_proj     | llama2   |
+| [BLOOM](https://huggingface.co/bigscience/bloom)         | 560M/1.1B/1.7B/3B/7.1B/176B | query_key_value   | -        |
+| [BLOOMZ](https://huggingface.co/bigscience/bloomz)       | 560M/1.1B/1.7B/3B/7.1B/176B | query_key_value   | -        |
+| [Falcon](https://huggingface.co/tiiuae/falcon-7b)        | 7B/40B                      | query_key_value   | -        |
+| [Baichuan](https://github.com/baichuan-inc/baichuan-13B) | 7B/13B                      | W_pack            | baichuan |
+| [InternLM](https://github.com/InternLM/InternLM)         | 7B                          | q_proj,v_proj     | intern   |
+| [Qwen](https://github.com/QwenLM/Qwen-7B)                | 7B                          | c_attn            | chatml   |
+| [XVERSE](https://github.com/xverse-ai/XVERSE-13B)        | 13B                         | q_proj,v_proj     | xverse   |
+
+- **默认模块**是 `--lora_target` 参数的部分可选项。请使用 `python src/train_bash.py -h` 查看全部可选项。
+- 对于所有“基座”（Base）模型，`--template` 参数可以是 `default`, `alpaca`, `vicuna` 等任意值。但“对话”（Chat）模型请务必使用对应的模板。
 
