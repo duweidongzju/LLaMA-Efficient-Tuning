@@ -12,7 +12,7 @@ create -n qwen python=3.8
 conda activate qwen
 pip install torch
 pip install torch_npu
-source /home/username/env/ascend-toolkit/set_env.sh
+source /usr/local/Ascend/ascend-toolkit/set_env.sh
 
 git clone -b npu https://github.com/duweidongzju/LLaMA-Efficient-Tuning.git
 cd ./LLaMA-Efficient-Tuning
@@ -182,7 +182,7 @@ input:exit
 # Support Models
 
 ## model
-| 模型名                                                   | 模型大小                     | 默认模块           | Template |
+| 模型名                                                   | 模型大小                    | lora_target       | Template |
 | -------------------------------------------------------- | --------------------------- | ----------------- |----------|
 | [LLaMA](https://github.com/facebookresearch/llama)       | 7B/13B/33B/65B              | q_proj,v_proj     | -        |
 | [LLaMA-2](https://huggingface.co/meta-llama)             | 7B/13B/70B                  | q_proj,v_proj     | llama2   |
