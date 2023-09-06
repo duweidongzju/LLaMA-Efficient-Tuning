@@ -79,6 +79,26 @@ What GPU(s) (by id) should be used for training on this machine as a comma-seper
 --------------------------------------------------------------------------------------------------------------------------------------
 Do you wish to use FP16 or BF16 (mixed precision)?
 -> fp16
+accelerate configuration saved at /root/.cache/huggingface/accelerate/default_config.yaml
+```
+设置后的accelerate config文件内容如下
+```yaml
+compute_environment: LOCAL_MACHINE                                                                                                              
+debug: false                                                                                                         
+distributed_type: MULTI_NPU
+downcast_bf16: 'no'
+gpu_ids: all
+machine_rank: 0
+main_training_function: main
+mixed_precision: fp16
+num_machines: 1
+num_processes: 8
+rdzv_backend: static
+same_network: true
+tpu_env: []
+tpu_use_cluster: false
+tpu_use_sudo: false
+use_cpu: false
 ```
 
 使用下面脚本进行多卡训练,脚本路径`./scripts/run_pretraining_multi_NPUs.sh`  
