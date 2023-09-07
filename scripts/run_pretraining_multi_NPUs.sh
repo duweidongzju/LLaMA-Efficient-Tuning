@@ -9,7 +9,7 @@ INF_NAN_MODE_ENABLE=1 accelerate launch scr/train_bash.py \
     --stage pt \
     --model_name_or_path $path_to_llama_model \
     --do_train \
-    --dataset wiki_domo \
+    --dataset wiki_demo \
     --template default \
     --finetuning_type lora \
     --lora_target q_proj,v_proj \
